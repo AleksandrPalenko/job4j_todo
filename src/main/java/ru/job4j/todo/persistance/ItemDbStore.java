@@ -20,149 +20,91 @@ public class ItemDbStore {
         this.sf = sf;
     }
 
-    public void deleteFrom() {
+    private <T> T tx(final Function<Session, T> command) {
         final Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.createQuery("TRUNCATE TABLE items RESTART IDENTITY");
-            session.getTransaction().commit();
-            session.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        final Transaction tx = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            tx.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
         }
+    }
+
+    public void deleteFrom() {
+        this.tx(session -> session.createQuery("TRUNCATE TABLE items RESTART IDENTITY"));
     }
 
     public Item add(Item item) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.save(item);
-            session.getTransaction().commit();
-            return item;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        this.tx(session -> session.save(item));
+        return item;
     }
 
     public boolean delete(int id) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.createQuery("delete from Item i where i.id = :fId ")
-                    .setParameter("fId", id)
-                    .executeUpdate();
-            session.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session -> {
+                    final Query query = session.createQuery("DELETE FROM Item i WHERE i.id = :fId ");
+                    query.setParameter("fId", id).executeUpdate();
+                    return true;
+                }
+        );
     }
 
     public void updateByIdToTrue(int id) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.createQuery("update Item i set i.done = true where i.id = :fId ")
-                    .setParameter("fId", id)
-                    .executeUpdate();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        this.tx(session ->
+                session.createQuery("UPDATE Item i SET i.done = :newDone WHERE i.id = :fId ")
+                        .setParameter("newDone", true)
+                        .setParameter("fId", id)
+                        .executeUpdate()
+        );
     }
 
     public void updateByIdToFalse(int id) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.createQuery("update Item i set i.done = false where i.id = :fId ")
-                    .setParameter("fId", id)
-                    .executeUpdate();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        this.tx(session ->
+                session.createQuery("UPDATE Item i SET i.done = :newDone WHERE i.id = :fId ")
+                        .setParameter("newDone", false)
+                        .setParameter("fId", id)
+                        .executeUpdate()
+        );
     }
 
     public List<Item> findAllItems() {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            List result = session.createQuery("from Item ").list();
-            session.getTransaction().commit();
-            return result;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session ->
+                session.createQuery("from Item ").list()
+        );
     }
 
     public List<Item> findTrueItems() {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            List result = session.createQuery("from Item i where i.done = true ").list();
-            session.getTransaction().commit();
-            return result;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session ->
+                session.createQuery("from Item i where i.done = true ").list()
+        );
     }
 
     public List<Item> findFalseItems() {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            List result = session.createQuery("from Item i where i.done = false ").list();
-            session.getTransaction().commit();
-            return result;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session ->
+                session.createQuery("from Item i where i.done = false ").list()
+        );
     }
 
     public List<Item> findByName(String key) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            List<Item> result = session.createQuery(key, Item.class).list();
-            session.getTransaction().commit();
-            session.close();
-            return result;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session ->
+                session.createQuery(key, Item.class).list()
+        );
     }
 
     public Item findById(int id) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            Item result = session.get(Item.class, id);
-            session.getTransaction().commit();
-            return result;
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        return this.tx(session ->
+                session.get(Item.class, id)
+        );
     }
 
     public void update(Item item) {
-        Session session = sf.openSession();
-        try (session) {
-            session.beginTransaction();
-            session.update(item);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        }
+        this.tx(
+                session -> {
+                    session.update(item);
+                    return new Object();
+                }
+        );
     }
 }
