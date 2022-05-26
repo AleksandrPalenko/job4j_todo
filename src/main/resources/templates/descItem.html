@@ -34,6 +34,12 @@
                 <div class="form-group">
                     <p><h4>Описание задачи</h4>
                      <span th:text="${item.description}"></span>
+                    <p><b>Создана:</b>
+                    <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
+                    </p>
+                    <p><b>Исполнитель</b>
+                    <td th:text="${item.user.getName}"></td>
+                    </p>
                      <td>
                          <form th:action="@{|/updateTaskToTrue/${item.id}|}" method="GET">
                              <span th:if="${!item.done}">

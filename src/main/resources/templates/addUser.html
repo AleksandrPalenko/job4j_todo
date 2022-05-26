@@ -1,11 +1,9 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns="http://www.w3.org/1999/html" lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -18,6 +16,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>TODO List</title>
 </head>
 <body>
@@ -30,32 +29,44 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-item nav-link active" th:href="@{/formAddItem}">Добавить задание</a>
-                <a class="nav-item nav-link" th:href="@{/items}">TODO list</a>
+                <a class="nav-item nav-link" th:href="@{/formAddItem}">Добавить задание</a>
+                <a class="nav-item nav-link active" th:href="@{/items}">All TODO list</a>
+                <a class="nav-item nav-link" th:href="@{/doneItems}">Done list</a>
+                <a class="nav-item nav-link" th:href="@{/newItems}">New list</a>
+                <a class="nav-item nav-link" th:href="@{/formAddUser}">Регистрация</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Выйти</span>
+                </a>
             </div>
         </div>
     </nav>
-    <h1 class="display-4">TODO List</h1>
-    <div class="row pt-3">
+    <div class="row">
         <div class="card" style="width: 100%">
-            <div class="card-header">
-                Новая задача
+            <div class="card-header" style="font-weight: 300">
+                Регистрация.
             </div>
             <div class="card-body">
-                <form th:action="@{/createItem}" method="POST">
+                <div th:if="${fail}" class="alert alert-danger" role="alert">
+                    Пользователь с введенным email существует в системе!
+                </div>
+                <form th:action="@{/registration}" method="POST" th:object="${user}">
+                    <input type="hidden" name="id" value="0"/>
                     <div class="form-group">
-                        <label for="name">Название</label>
-                        <input type="text" class="form-control" name="name" id="name">
+                        <label for="name" style="font-weight: 300">Имя</label>
+                        <input type="text" class="form-control" name="name" id="name" th:placeholder="*{name}">
                     </div>
                     <div class="form-group">
-                        <label for="description">Описание</label>
-                        <input type="text" class="form-control" name="description" id="description">
+                        <label for="email" style="font-weight: 300">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" th:placeholder="*{email}">
                     </div>
                     <div class="form-group">
-                        <label for="user.id">Исполнитель</label>
-                        <select class="form-control" id="user.id" name="user.id">
-                            <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
-                        </select>
+                        <label for="password" style="font-weight: 300">Пароль</label>
+                        <input type="password" class="form-control" name="password" id="password" th:placeholder="*{password}">
                     </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>

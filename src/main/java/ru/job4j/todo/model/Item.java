@@ -20,6 +20,20 @@ public class Item implements Serializable {
 
     private boolean done;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public static Item of(String name, String description, LocalDateTime created, boolean done, User user) {
+        Item item = new Item();
+        item.name = name;
+        item.description = description;
+        item.created = created;
+        item.done = done;
+        item.user = user;
+        return item;
+    }
+
     public Item() {
     }
 
@@ -73,6 +87,14 @@ public class Item implements Serializable {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override

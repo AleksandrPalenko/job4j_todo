@@ -33,6 +33,15 @@
                 <a class="nav-item nav-link active" th:href="@{/items}">All TODO list</a>
                 <a class="nav-item nav-link" th:href="@{/doneItems}">Done list</a>
                 <a class="nav-item nav-link" th:href="@{/newItems}">New list</a>
+                <a class="nav-item nav-link" th:href="@{/formAddUser}">Регистрация</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Выйти</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -43,6 +52,7 @@
                 <th scope="col">Название</th>
                 <th scope="col">Дата создания</th>
                 <th scope="col">Статус</th>
+                <th scope="col">Исполнитель</th>
             </tr>
             </thead>
             <tbody>
@@ -51,18 +61,18 @@
                     <a th:href="@{|/formDescItem/${item.id}|}">
                         <i class="fa fa-edit"></i>
                     </a>
-                    <span th:text="${item.getName()}"></span>
+                    <span th:text="${item.name}"></span>
                 </td>
                 <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
-                <td>
-                    <span th:if="${!item.done}"><span>Задание не выполнено</span></span>
-                    <span th:if="${item.done}"><span>Выполнено</span></span>
-                </td>
-
-            </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-</body>
-</html>
+                 <td>
+                     <span th:if="${!item.done}"><span>Задание не выполнено</span></span>
+                     <span th:if="${item.done}"><span>Выполнено</span></span>
+                 </td>
+                <td th:text="${item.getUser().getName()}"></td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  </body>
+  </html>

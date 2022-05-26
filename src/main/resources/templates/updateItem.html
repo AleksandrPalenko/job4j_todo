@@ -63,6 +63,13 @@
                             <input type="text" class="form-control" name="done" id="done"
                                    th:field="*{done}">
                         </div>
+                        <div class="form-group">
+                            <label for="user.id">Исполнитель</label>
+                            <select class="form-control" id="user.id" name="user.id">
+                                <option th:each="user : ${users}" th:value="${user.id}"
+                                        th:text="${user.name}" th:selected="${user.id == item.user.id}"></option>
+                            </select>
+                        </div>
                         <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>
