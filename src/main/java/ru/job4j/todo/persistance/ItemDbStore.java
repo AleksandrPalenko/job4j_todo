@@ -107,4 +107,10 @@ public class ItemDbStore {
                 }
         );
     }
+
+    public Item findByIdWithCategories(int id) {
+        return (Item) this.tx(session -> session.createQuery("select i from Item i left join fetch i.categories where i.id = :fId")
+                .setParameter("fId", id)
+                .uniqueResult());
+    }
 }

@@ -3,7 +3,7 @@ package ru.job4j.todo.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "items")
@@ -19,6 +19,9 @@ public class Item implements Serializable {
     private LocalDateTime created;
 
     private boolean done;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Category> categories = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -95,6 +98,14 @@ public class Item implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 
     @Override

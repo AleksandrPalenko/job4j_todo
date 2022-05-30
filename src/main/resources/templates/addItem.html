@@ -52,6 +52,15 @@
                         <input type="text" class="form-control" name="description" id="description">
                     </div>
                     <div class="form-group">
+                        <label for="category.id">Категории</label>
+                        <select class="form-control" id="category.id" name="findCategories" multiple="multiple">
+                            <option th:each="c : ${categories}"
+                                    th:value="${c.id}"
+                                    th:text="${c.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label for="user.id">Исполнитель</label>
                         <select class="form-control" id="user.id" name="user.id">
                             <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>

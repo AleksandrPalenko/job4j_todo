@@ -22,7 +22,7 @@
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Todo list Job</a>
+        <a class="nav-item nav-link active" th:href="@{/items}">Todo list Job</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -30,7 +30,6 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-item nav-link" th:href="@{/formAddItem}">Добавить задание</a>
-                <a class="nav-item nav-link active" th:href="@{/items}">All TODO list</a>
                 <a class="nav-item nav-link" th:href="@{/doneItems}">Done list</a>
                 <a class="nav-item nav-link" th:href="@{/newItems}">New list</a>
                 <a class="nav-item nav-link" th:href="@{/formAddUser}">Регистрация</a>
@@ -50,18 +49,23 @@
             <thead>
             <tr>
                 <th scope="col">Название</th>
-                <th scope="col">Дата создания</th>
-                <th scope="col">Статус</th>
-                <th scope="col">Исполнитель</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="item: ${items}">
-                <td>
-                    <a th:href="@{|/formDescItem/${item.id}|}">
-                        <i class="fa fa-edit"></i>
-                    </a>
-                    <span th:text="${item.name}"></span>
+                <!--  <th scope="col">Категория</th>-->
+                 <th scope="col">Дата создания</th>
+                 <th scope="col">Статус</th>
+                 <th scope="col">Исполнитель</th>
+             </tr>
+             </thead>
+             <tbody>
+             <tr th:each="item: ${items}">
+                 <td>
+                     <a th:href="@{|/formDescItem/${item.id}|}">
+                         <i class="fa fa-edit"></i>
+                     </a>
+                     <span th:text="${item.name}"></span>
+               <!--  <td>                                                        -->
+              <!--       <span th:each="category: ${item.getCategories()}"      -->
+              <!--             th:text="${category.name}"></span>               -->
+              <!--  </td>                                                       -->
                 </td>
                 <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
                  <td>

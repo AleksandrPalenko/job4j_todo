@@ -38,6 +38,10 @@ public class ItemService {
         return store.findById(id);
     }
 
+    public Item findByIdWithCategories(int id) {
+        return store.findByIdWithCategories(id);
+    }
+
     public boolean delete(int idItem) {
         findById(idItem);
         return store.delete(idItem);
