@@ -20,7 +20,7 @@ public class CategoryService {
         return store.findAll();
     }
 
-    public Optional<Category> add(Category category) {
+    public Category add(Category category) {
         return store.add(category);
     }
 

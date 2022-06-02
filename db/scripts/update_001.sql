@@ -8,7 +8,7 @@ CREATE TABLE if not exists items (
 );
 
 --ALTER SEQUENCE items_id_seq RESTART WITH 1;
-create table users (
+CREATE TABLE if not exists users (
     id serial primary key,
     email varchar (2000),
     password varchar (2000)

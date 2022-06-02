@@ -34,6 +34,13 @@
                 <div class="form-group">
                     <p><h4>Описание задачи</h4>
                      <span th:text="${item.description}"></span>
+                    <tr>
+                        <th scope="row">Категории:</th>
+                        <td>
+                            <span th:each="c: ${item.getCategories()}"
+                                  th:text="${c.name}"></span>
+                        </td>
+                    </tr>
                     <p><b>Создана:</b>
                     <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
                     </p>

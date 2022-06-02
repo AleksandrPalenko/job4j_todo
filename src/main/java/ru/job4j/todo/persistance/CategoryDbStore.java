@@ -32,12 +32,11 @@ public class CategoryDbStore {
         }
     }
 
-    public Optional<Category> add(Category category) {
-        this.tx(session -> {
-            session.save(category);
-            return Optional.ofNullable(category);
-        });
-        return Optional.empty();
+    public Category add(Category category) {
+        this.tx(
+                session -> session.save(category)
+        );
+        return category;
     }
 
     public List<Category> findAll() {

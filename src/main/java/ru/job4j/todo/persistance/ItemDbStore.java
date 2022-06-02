@@ -71,7 +71,7 @@ public class ItemDbStore {
 
     public List<Item> findAllItems() {
         return this.tx(session ->
-                session.createQuery("from Item ").list()
+                session.createQuery("select distinct i from Item i join fetch i.categories ").list()
         );
     }
 
@@ -109,8 +109,9 @@ public class ItemDbStore {
     }
 
     public Item findByIdWithCategories(int id) {
-        return (Item) this.tx(session -> session.createQuery("select i from Item i left join fetch i.categories where i.id = :fId")
+        return (Item) this.tx(session -> session.createQuery("select distinct i from Item i left join fetch i.categories where i.id = :fId")
                 .setParameter("fId", id)
                 .uniqueResult());
     }
+
 }

@@ -49,34 +49,33 @@
             <thead>
             <tr>
                 <th scope="col">Название</th>
-                <!--  <th scope="col">Категория</th>-->
-                 <th scope="col">Дата создания</th>
-                 <th scope="col">Статус</th>
-                 <th scope="col">Исполнитель</th>
-             </tr>
-             </thead>
-             <tbody>
-             <tr th:each="item: ${items}">
-                 <td>
-                     <a th:href="@{|/formDescItem/${item.id}|}">
-                         <i class="fa fa-edit"></i>
-                     </a>
-                     <span th:text="${item.name}"></span>
-               <!--  <td>                                                        -->
-              <!--       <span th:each="category: ${item.getCategories()}"      -->
-              <!--             th:text="${category.name}"></span>               -->
-              <!--  </td>                                                       -->
+                <th scope="col">Категория</th>
+                <th scope="col">Дата создания</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Исполнитель</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item: ${items}">
+                <td>
+                    <a th:href="@{|/formDescItem/${item.id}|}">
+                        <i class="fa fa-edit"></i>
+                    </a>
+                    <span th:text="${item.name}"></span>
+                <td>
+                    <span th:each="c: ${item.getCategories()}"
+                          th:text="${c.name}"></span>
                 </td>
                 <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
-                 <td>
-                     <span th:if="${!item.done}"><span>Задание не выполнено</span></span>
-                     <span th:if="${item.done}"><span>Выполнено</span></span>
-                 </td>
+                <td>
+                    <span th:if="${!item.done}"><span>Задание не выполнено</span></span>
+                    <span th:if="${item.done}"><span>Выполнено</span></span>
+                </td>
                 <td th:text="${item.getUser().getName()}"></td>
-              </tr>
-              </tbody>
-          </table>
-      </div>
-  </div>
-  </body>
-  </html>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
