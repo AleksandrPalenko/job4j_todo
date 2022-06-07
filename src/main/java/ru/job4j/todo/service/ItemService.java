@@ -6,6 +6,7 @@ import ru.job4j.todo.persistance.ItemDbStore;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,7 +23,6 @@ public class ItemService {
     }
 
     public void add(Item item) {
-        item.setCreated(LocalDateTime.now());
         store.add(item);
     }
 

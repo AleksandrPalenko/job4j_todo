@@ -14,4 +14,4 @@ CREATE TABLE if not exists users (
     password varchar (2000)
 );
 
-ALTER TABLE users ADD CONSTRAINT email_unique UNIQUE (email);
+--ALTER TABLE users ADD CONSTRAINT email_unique UNIQUE (email);

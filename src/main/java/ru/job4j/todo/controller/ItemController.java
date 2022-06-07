@@ -13,10 +13,7 @@ import ru.job4j.todo.service.UserService;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 public class ItemController {
@@ -42,15 +39,15 @@ public class ItemController {
     @GetMapping("/doneItems")
     public String doneItems(Model model, HttpSession httpSession) {
         model.addAttribute("user", userShow(httpSession));
-        model.addAttribute("items", service.trueItem());
-        return "items";
+        model.addAttribute("items", service.findAll());
+        return "doneItems";
     }
 
     @GetMapping("/newItems")
     public String newItems(Model model, HttpSession httpSession) {
         model.addAttribute("user", userShow(httpSession));
-        model.addAttribute("items", service.falseItem());
-        return "items";
+        model.addAttribute("items", service.findAll());
+        return "newItems";
     }
 
     @GetMapping("/formAddItem")
@@ -60,7 +57,6 @@ public class ItemController {
         model.addAttribute("item",
                 new Item(1, "Новая задача",
                         "Заполните описание",
-                        null,
                         false)
         );
         return "addItem";
@@ -77,20 +73,27 @@ public class ItemController {
         service.add(item);
         item.setCategories(list);
         item.setUser(user);
-        item.setCreated(LocalDateTime.now());
         return "redirect:/items";
     }
 
     @GetMapping("/formUpdateItem/{itemId}")
     public String formUpdateItem(Model model, @PathVariable("itemId") int id) {
         model.addAttribute("users", userService.listOfUsers());
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("item", service.findByIdWithCategories(id));
         return "updateItem";
     }
 
     @PostMapping("/updateItem")
-    public String updateItem(@ModelAttribute Item item, HttpSession httpSession) {
+    public String updateItem(@ModelAttribute Item item, HttpSession httpSession,
+                             @RequestParam(value = "findCategories", required = false) List<Integer> findCategories) {
         item.setUser(userService.findById(item.getUser().getId()));
+        List<Category> list = new ArrayList<>();
+        for (Integer categoryId : findCategories) {
+            list.add(categoryService.findById(categoryId));
+        }
+        service.add(item);
+        item.setCategories(list);
         service.update(item);
         return "redirect:/items";
     }

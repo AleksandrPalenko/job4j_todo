@@ -42,7 +42,7 @@
                         </td>
                     </tr>
                     <p><b>Создана:</b>
-                    <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
+                    <td th:text="${#dates.format(item.created, 'dd-MM-yyyy HH:mm')}"></td>
                     </p>
                     <p><b>Исполнитель</b>
                     <td th:text="${item.user.getName}"></td>

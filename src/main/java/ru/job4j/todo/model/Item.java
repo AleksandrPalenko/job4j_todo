@@ -1,5 +1,7 @@
 package ru.job4j.todo.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -16,7 +18,9 @@ public class Item implements Serializable {
 
     private String description;
 
-    private LocalDateTime created;
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
+    private Date created;
 
     private boolean done;
 
@@ -27,11 +31,11 @@ public class Item implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Item of(String name, String description, LocalDateTime created, boolean done, User user) {
+    public static Item of(String name, String description, boolean done, User user) {
         Item item = new Item();
         item.name = name;
         item.description = description;
-        item.created = created;
+        item.created = new Date(System.currentTimeMillis());
         item.done = done;
         item.user = user;
         return item;
@@ -44,11 +48,11 @@ public class Item implements Serializable {
         this.name = name;
     }
 
-    public Item(int id, String name, String description, LocalDateTime created, boolean done) {
+    public Item(int id, String name, String description, boolean done) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.created = created;
+        this.created = new Date(System.currentTimeMillis());
         this.done = done;
     }
 
@@ -76,11 +80,11 @@ public class Item implements Serializable {
         this.description = description;
     }
 
-    public LocalDateTime getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 

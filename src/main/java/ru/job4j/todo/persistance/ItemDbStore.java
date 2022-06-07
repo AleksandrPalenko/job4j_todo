@@ -71,19 +71,19 @@ public class ItemDbStore {
 
     public List<Item> findAllItems() {
         return this.tx(session ->
-                session.createQuery("select distinct i from Item i join fetch i.categories ").list()
+                session.createQuery("select distinct i from Item i left join fetch i.categories ").list()
         );
     }
 
     public List<Item> findTrueItems() {
         return this.tx(session ->
-                session.createQuery("from Item i where i.done = true ").list()
+                session.createQuery("select distinct i from Item i join fetch i.categories where i.done = false").list()
         );
     }
 
     public List<Item> findFalseItems() {
         return this.tx(session ->
-                session.createQuery("from Item i where i.done = false ").list()
+                session.createQuery("select distinct i from Item i join fetch i.categories where i.done = done ").list()
         );
     }
 
